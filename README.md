@@ -1,1 +1,1 @@
-# sc-RNA-Seq_Data_Analysis
+# Single Cell RNA Seq Data Analysis
