@@ -14,7 +14,7 @@ rep_names = c('par_rep1','par_rep2', 'per_rep1', 'per_rep2', 'per_rep3')
 treat_factors = factor(c('control', 'control', 'treated', 'treated', 'treated'))
 col_data = data.frame(row.names = rep_names, Treatment = treat_factors)
 gene_expr_counts = per_reps_counts[ , rep_names] # Selected all columns except gene_id column
-per_reps_counts = per_reps_counts[rowSums(gene_expr) >= 1, ] # Removed empty genes
+per_reps_counts = per_reps_counts[rowSums(gene_expr_counts) >= 1, ] # Removed empty genes
 
 ##---- String Function to Remove Version IDs from Ensembl Gene IDs --------
 clean_vers = function(my.string) {
@@ -24,8 +24,6 @@ per_reps_counts$Gene_ID = sapply(per_reps_counts$Gene_ID,clean_vers)  # Stripped
 
 ##----- Converting Ensembl IDs to HGNC symbols-------------
 library(biomaRt)
-library(magrittr)
-library(dpylr)
 mart = useDataset("hsapiens_gene_ensembl", useMart("ensembl"))
 genes = getBM(attributes = c("ensembl_gene_id","hgnc_symbol"),
               values=per_reps_counts$Gene_ID, mart=mart)
@@ -53,3 +51,24 @@ dset = DESeqDataSetFromMatrix(cleaned_reps_counts[ , rep_names],
 dset = DESeq(dset) # Normalization
 gene_expr_VST = getVarianceStabilizedData(dset) # Applied Variance Stabilizing Transformation
 
+##----PCA on Normalized Data to confirm correct designation of replicates -----
+library(ggplot2)
+library(PCAtools)
+metadata = data.frame(row.names = colnames(gene_expr_VST))
+metadata$treated = c('par', 'par', 'per', 'per', 'per')
+pca_r = pca(gene_expr_VST, metadata = metadata)
+biplot(pca_r,colby = 'treated')
+
+##---- PROGENy Pathway Analysis
+# PROGENy requires HGNC Gene names as row names or index and replicates as columns
+rownames(gene_expr_VST) = cleaned_reps_counts$HGNC
+library(progeny)
+pathways = progeny(gene_expr_VST, scale=T, organism = "Human", top = 100, perm = 1, 
+                      verbose = FALSE)
+
+##---- Displaying Heatmap of Pathway Results
+library(pheatmap)
+myColor = colorRampPalette(c("Darkblue", "white","red"))(100)
+pheatmap(pathways_og,fontsize=14, show_rownames = FALSE,
+         color=myColor, main = "PROGENy", angle_col = 45, treeheight_col = 0,  
+         border_color = NA)
