@@ -36,7 +36,7 @@ It is great to see parental replicates clustering around each other, confirming 
 
 ## PROGENy Pathway Activity Figures
 ### Persister and Non-Persister Pathway Activity
-![Overall_Reps_Pathways](images/PROGENy.png)
+![Overall_Reps_Pathways](images/progeny_formatted_well.png)
 
 Pathway scores are Z-score normalized along each pathway, implying each pathway's mean score is 0, but standard deviation is 1. Since the normalization is done along each pathway, I can determine whether pathways are relatively active or inactive amongst the non-persister (parental) and persister replicates, created in a high cellular stress environment. Amongst the common stress response pathways: NFkB, p53, MAPK, Hypoxia, TGFb, it is interesting to see that these pathways do not all have relatively higher activity in a certain type of replicate: persister or non-persister over the other. However, it is interesting to see almost an on-off level of discrepancy in pathway activity for all the pathways aside from potentially p53 and VEGF between the non-persister and persister replicates. 
 
