@@ -8,7 +8,7 @@ opts_chunk$set(
   message = FALSE
 )
 
-##--------- Loading in Dataset & Setting index as Ensembl Gene IDs-----------
+##--------- Loading in Dataset & Removing absent genes-----------
 per_reps_counts = read.table('final_cleaned_all_reps.txt', sep = '\t', header = TRUE)
 rep_names = c('par_rep1','par_rep2', 'per_rep1', 'per_rep2', 'per_rep3')
 treat_factors = factor(c('control', 'control', 'treated', 'treated', 'treated'))
