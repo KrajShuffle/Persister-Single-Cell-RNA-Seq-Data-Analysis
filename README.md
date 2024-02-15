@@ -23,9 +23,25 @@ To conduct the persister cell pathway analysis, I will be leveraging an R packag
 
 1. Filter out genes with 0 reads across all replicates (2 non-persister and 3 persister)
 2. Convert current Ensembl IDs to HGNC symbols for all genes
-3. Combine gene expression of genes with multiple Ensembl IDs
+3. Combine gene expression of genes with multiple Ensembl IDs, but same Ensembl ID
 4. Apply a Variance Stabilizing Transformation to normalize the gene expression data
 5. Use normalized data for PCA to confirm replicates
+   ![PCA](images/PCA.png)
+
+It is great to see parental replicates clustering around each other, confirming similarity in gene expression signature amongst non-persister replicates. However, for the persister replicates, persister replicate #1 and #2 are in a close cluster, but persister replicate #3 is distant. Regardless, given Principal Component #1 is accounting for almost 97% of the dataset variation, it is clear replicates are being separated based on whether there are persister or non-persister, 
+
+
 6. Transform data into suitable input for PROGENy
 7. Create heatmap of outputted pathway activity scores from PROGENy
 
+## PROGENy Pathway Activity Figures
+### Persister and Non-Persister Pathway Activity
+![Overall_Reps_Pathways](images/PROGENy.png)
+
+Pathway scores are Z-score normalized along each pathway, implying each pathway's mean score is 0, but standard deviation is 1. Since the normalization is done along each pathway, I can determine whether pathways are relatively active or inactive amongst the non-persister (parental) and persister replicates, created in a high cellular stress environment. Amongst the common stress response pathways: NFkB, p53, MAPK, Hypoxia, TGFb, it is interesting to see that these pathways do not all have relatively higher activity in a certain type of replicate: persister or non-persister over the other. However, it is interesting to see almost an on-off level of discrepancy in pathway activity for all the pathways aside from potentially p53 and VEGF between the non-persister and persister replicates. 
+
+### Non-Persister Pathway Activity
+![Non_Persis_Pathways](images/PROGENy_Par.png)
+
+### Persister Pathway Activity
+![Persis_Pathways](images/PROGENy_PER.png)
